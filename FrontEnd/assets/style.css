@@ -137,31 +137,31 @@ li:hover {
 	width: 100%;
 
 }
-#contact {
+#contact, #login {
 	width: 50%;
 margin: auto;
 }
-#contact > * {
+#contact, #login > * {
 	text-align: center;
 
 }
-#contact h2{
+#contact h2, #login h2 {
 	margin-bottom: 20px;
 }
-#contact form {
+#contact form, #login form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input {
+#contact input, #login input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+#contact label, #login label {
 	margin: 2em 0 1em 0;
 }
 #contact textarea {
@@ -186,3 +186,25 @@ footer nav ul {
 	margin: 2em
 }
 
+/* Boutons filtres */
+
+.btn-filtre {
+	padding: 10px 20px;
+	border-radius: 60px;
+	border: #1D6154 1px solid;
+	background: none;
+	color: #1D6154;
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 16px;
+	text-align: center;
+	margin: 0;
+	width: auto;
+	box-sizing: border-box;
+	margin: 50px 5px 40px 5px;
+}
+
+.btn-filtre:hover {
+	background-color: #1D6154;
+	color:white;
+}
