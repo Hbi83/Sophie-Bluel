@@ -1,12 +1,8 @@
         // Récupération des données des projets sur API//
-
-
-
-
-// Suppression des projets précédents //
 async function displayAllProjects() {
     const reponse = await fetch("http://localhost:5678/api/works");
     const projets = await reponse.json();
+    // Suppression des projets précédents //
     document.querySelector(".gallery").innerHTML = '';
     // Ajout des travaux de l'architect récupéré dynamiquement //
     projets.forEach(projet => {
@@ -93,7 +89,47 @@ document.querySelectorAll(".btn-filtre").forEach(btnFilter =>{
 
 
 
+// Mode Admin //
 
+// Stockage du token dans une constante //
+const token = localStorage.getItem("token");
+console.log(token);
 
+// Si présence du token, mode edition activé //
 
+if (token !== null) {
+    // On cache les filtres //
+    const cacherBtn = document.querySelector(".btn-filtres");
+    cacherBtn.style.display ="none";
+    // Création du bandeau noir //
+    const bandeNoir = document.querySelector("html");
+    const divNoir = document.createElement("div");
+    bandeNoir.prepend(divNoir);
+    divNoir.className = "div-noir";
 
+    const edition = document.createElement("div");
+    divNoir.appendChild(edition);
+    edition.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Mode édition';
+    edition.className = "edition";
+
+    // je change dans la nav login en logout //
+    const menu = document.getElementById("menu");
+    const menuLogin = document.getElementById("menu-login");
+    const menuLogout = document.createElement("li");
+    menuLogout.innerHTML = "<a href='#'>logout</a>";
+    menu.replaceChild(menuLogout, menuLogin);
+    function logout(e) {
+        e.preventDefault();
+        localStorage.removeItem("token");
+        location.reload();
+    }
+    menuLogout.addEventListener("click", logout);
+    
+    // Bouton "Modifier" ouvrant la modale //
+    const editButtonPortfolio = document.createElement("a");
+	const works = document.querySelector(".titre_projet");
+	works.appendChild(editButtonPortfolio);
+	editButtonPortfolio.href = "#modal";
+	editButtonPortfolio.innerHTML = "<i class='fa-regular fa-pen-to-square'></i>modifier";
+	editButtonPortfolio.setAttribute("id", "button-portfolio");
+}
