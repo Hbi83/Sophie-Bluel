@@ -21,11 +21,8 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    else if (response.status === 401) {
-        alert("Mauvais mot de passe", response.statusText);
+    else if (response.status === 401 || response.status === 404) {
+        alert("Identifiant incorrect", response.statusText);
     }
 
-    else if (response.status === 404) {
-        alert("Identifiants faux", response.statusText);
-    }
 })
