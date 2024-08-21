@@ -177,7 +177,19 @@ margin: auto;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+#login input[type="submit"] {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin : 2em auto ;
+	width: 180px;
+	text-align: center;
+	border-radius: 60px;
+	cursor: pointer;
+}
+
+#contact input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -186,6 +198,7 @@ input[type="submit"]{
 	width: 180px;
 	text-align: center;
 	border-radius: 60px ;
+	cursor: pointer;
 }
 
 footer nav ul {
@@ -212,7 +225,7 @@ footer nav ul {
 	margin: 50px 5px 40px 5px;
 }
 
-.btn-filtre:hover {
+.btn-filtre:hover, .btn-filtre:focus {
 	background-color: #1D6154;
 	color:white;
 }
@@ -420,6 +433,7 @@ footer nav ul {
 	border: #A7A7A7 1px solid;
 	font-family: 'Syne';
 	padding: 10px;
+	cursor: pointer;
 }
 
 #title {

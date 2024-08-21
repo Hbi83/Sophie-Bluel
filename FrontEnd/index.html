@@ -26,17 +26,17 @@
 			<div class="modalContent">
 				<form method="POST" id="addPictureForm" name="addPictureForm">
 					<div class = containerFile>
-						<span><i class ="fa-regular fa-image"></i></span>
-						<label for="image">+Ajouter photo</label>
+						<span><i id="imgTemp" class ="fa-regular fa-image"></i></span>
+						<label id="label" for="image">+Ajouter photo</label>
 						<input type="file" id="image" name="image">
-						<img src="#" alt="Aperçut de l'image">
-						<p>jpg,png: 4mo max</p>
+						<img id="imgPreview" src="#" alt="Aperçut de l'image">
+						<p id="text">jpg,png: 4mo max</p>
 					</div>
 					<label for="title">Titre</label>
 					<input type="text" id="title" name="title">
 					<label for="category">Catégorie</label>
 					<select name="category" id="category"></select>
-					<input type="submit" class="buttonValid">
+					<input id="btnValider" type="submit" class="buttonValid" disabled>
 				</form>
 			</div>
 		</div>
@@ -46,8 +46,8 @@
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul id="menu">
-			<li>projets</li>
-			<li>contact</li>
+			<li><a href="#portfolio">projets</a></li>
+			<li><a href="#contact">contact</a></li>
 			<li id="menu-login"><a href="login.html" id="logBtn">login</a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>

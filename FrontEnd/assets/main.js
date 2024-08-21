@@ -1,4 +1,4 @@
-        // Récupération des données des projets sur API//
+// Récupération des données des projets sur API//
 async function displayAllProjects() {
     const reponse = await fetch("http://localhost:5678/api/works");
     const projets = await reponse.json();
@@ -18,26 +18,28 @@ async function displayAllProjects() {
                     <figcaption>${title}</figcaption>
                 </figure>
             </div>
-          </div>
+        </div>
         `
     })
 }
 
+// Récupération des données des categories sur API//
+
 async function displayAllCategories() {
     const reponse = await fetch("http://localhost:5678/api/categories");
     const categories = await reponse.json();
-
+    
     const titre = document.querySelector(".titre_projet");
     const newDiv = document.createElement("div");
     titre.appendChild(newDiv);
     newDiv.className = "btn-filtres";
-
+    
     const buttonTous = document.createElement("button");
     newDiv.appendChild(buttonTous);
     buttonTous.innerHTML = "Tous";
     buttonTous.className = "btn-filtre";
     buttonTous.setAttribute("value", 0)
-
+    
     categories.forEach(categorie => {
         const buttonFilter = document.createElement("button");
         newDiv.appendChild(buttonFilter);
@@ -47,15 +49,14 @@ async function displayAllCategories() {
     });
 }
 
- 
 await displayAllProjects();
 await displayAllCategories();
+ 
 
-// ---------------------------------------------//
+// Fonction pour filter les projets//
 
 async function filterProject(e) {
-    const idFilter = e.target.value;
-    console.log(typeof idFilter);
+    const idFilter = e.target.value; 
     if (idFilter == '0') {
         return await displayAllProjects();
     }
@@ -134,7 +135,6 @@ if (token !== null) {
 
     // Ouverture et fermeture modal //
     let modal = null;
-    document.getElementById("modal1").addEventListener('click',() => (console.log("ici modal1")));
     const openModal = function (e) {
         e.preventDefault();
         const target = document.querySelector(e.target.getAttribute("href"));
@@ -155,6 +155,7 @@ if (token !== null) {
         e.preventDefault();
         modal.style.display = "none";
         modal.setAttribute("aria-hidden", true);
+        removeForm()
     }
 
     const stopPropagation = function (e) {
@@ -169,14 +170,15 @@ if (token !== null) {
         const reponse = await fetch("http://localhost:5678/api/works");
         const miniProjets = await reponse.json();
         // Ajout des travaux de l'architect récupéré dynamiquement //
+        document.querySelector(".modalContent").innerHTML = "";
         miniProjets.forEach(miniProjet => {
             let url = miniProjet.imageUrl;
             let title = miniProjet.title;
-            let catId = miniProjet.categoryId;
             let id = miniProjet.id;
+            let catId = miniProjet.categoryId;
             document.querySelector(".modalContent").innerHTML +=
             `
-                <div class=cat-${catId}>
+                <div class=${catId}>
                         <img class=miniWork src=${url} alt="${title}">
                         <button class="suppBtn" id=${id}> <i class="fa-solid fa-trash-can"></i></boutton>
                 </div>
@@ -190,23 +192,25 @@ if (token !== null) {
         })
     }
     await displayAllMiniProjects();
-
+    
+    
     // Fonction supp un projet //
+
     async function deleteProject(projectId) {
         console.log(projectId);
-            
-    const reponse = await fetch(`http://localhost:5678/api/works/${projectId}`, {
-        method: "DELETE",
-        headers: {
-        authorization: `Bearer ${token}`,
-        }
-    })
         
+        const reponse = await fetch(`http://localhost:5678/api/works/${projectId}`, {
+            method: "DELETE",
+            headers: {
+                authorization: `Bearer ${token}`,
+            }
+        })
         if (reponse.ok) {
-            const result = await reponse.json();
+            alert("Projet supprimé");
+            await displayAllProjects();
+            await displayAllMiniProjects();
         }
     }      
-
     // Formulaire ajouter une photo //
 
     const openModal2 = function(e) {
@@ -214,7 +218,8 @@ if (token !== null) {
         const editGallery = document.getElementById("editGallery");
         editGallery.style.display = "none";
         const addPictureModal = document.getElementById("addPicture");
-        addPictureModal.style.display = "flex";  
+        addPictureModal.style.display = "flex";
+        categoryId.value = ""; 
     }
 
     // Fleche retour du formulaire //
@@ -230,11 +235,11 @@ if (token !== null) {
 
     // Previsualisation image //
 
-    const previewImg = document.querySelector(".containerFile img");
-    const inputFile = document.querySelector(".containerFile input");
-    const labelFile = document.querySelector(".containerFile label");
-    const iconFile = document.querySelector(".containerFile .fa-image");
-    const pFile = document.querySelector(".containerFile p");
+    const previewImg = document.getElementById("imgPreview");
+    const inputFile = document.getElementById("image");
+    const labelFile = document.getElementById("label");
+    const iconFile = document.getElementById("imgTemp");
+    const pFile = document.getElementById("text");
 
     inputFile.addEventListener("change",() => {
         const file = inputFile.files[0];
@@ -248,7 +253,7 @@ if (token !== null) {
                 pFile.style.display = "none";
             }
             reader.readAsDataURL(file);
-        }         
+        }        
     })
     
 
@@ -265,24 +270,41 @@ if (token !== null) {
             select.appendChild(option);
         })
     }
-
+    
     await displayCategoryModal();
+    
+    // Activation du boutton valider si tous les champs sont remplis //
 
-
+  const changeBtnValid = function() {
+      if (image !== undefined && title.value !== "" && categoryId.value !== "") {
+          btnValid.style.backgroundColor = "#1D6154";
+          btnValid.removeAttribute("disabled");         
+        }
+        else {
+            btnValid.style.backgroundColor = "#A7A7A7"; 
+            btnValid.setAttribute("disabled", "true");      
+        }
+    }
+    
+    document.getElementById("addPictureForm").onchange = changeBtnValid;
+    
     // Post pour ajout de Travaux //
+    
+    const btnValid = document.querySelector(".buttonValid");
     const form = document.getElementById("addPictureForm");
     const image = document.getElementById("image");
-    const title = document.getElementById("title").value;
-    const categoryId = document.getElementById("category").value;
+    const imagePreview = document.getElementById("imgPreview");
+    const title = document.getElementById("title");
+    const categoryId = document.getElementById("category");
     
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append("image", image.files[0]);
-        formData.append("title", title);
-        formData.append("category", categoryId);
-        console.log(formData);
-
+        formData.append("title", title.value);
+        formData.append("category", categoryId.value);
+        console.log(title);
+        
         try {
             const response = await fetch('http://localhost:5678/api/works', {
                 method: "POST",
@@ -294,27 +316,35 @@ if (token !== null) {
             
             if (response.ok) {
                 const data = await response.json();
-                console.log("Ajout avec succès:", data);
+                alert("Ajout avec succès:", data);
+                removeForm();
+                await displayAllProjects();
+                await displayAllMiniProjects();
+
             } else {
-                console.error("Echec de l'ajout");
+                alert("Echec de l'ajout");
             }
         } catch (error) {
             console.error("Erreur:", error);
         }
     });
     
-    
-    // const reader = new FileReader();
-    // reader.onload = function(){
-    //      formData.image = reader.result;
-    // };
-    // inputFile.addEventListener('change', function() {
-    //     const file = inputFile.files[0];
-    //     if (file) {
-    //         reader.readAsDataURL(file);
-    //     }
-    // });
-    
+    // Fonction pour reset le formulaire //
+
+    function removeForm() {
+        title.value = "";
+        categoryId.value = "";
+        imagePreview.removeAttribute("src");
+        imagePreview.removeAttribute("alt");
+        imagePreview.style.display = "none";
+        labelFile.style.display = "flex";
+        iconFile.style.display = "flex";
+        pFile.style.display = "flex";
+        btnValid.style.backgroundColor = "#A7A7A7";
+        btnValid.setAttribute("disabled", "true");
+    }
+
+
 }
         
        
